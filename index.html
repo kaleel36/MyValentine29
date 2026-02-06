@@ -1,0 +1,1280 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>For Enaval &lt;3 ❤️</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* =========================
+       GLOBAL
+    ========================= */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: #000;
+        color: #ffd1dc;
+        font-family: "Poppins", sans-serif;
+        overflow-x: hidden;
+      }
+
+      canvas {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      section {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* =========================
+       BUTTON
+    ========================= */
+      .btn {
+        margin-top: 40px;
+        padding: 14px 36px;
+        border-radius: 30px;
+        border: 1px solid #ff4d6d;
+        background: transparent;
+        color: #ffb6c1;
+        font-size: 16px;
+        letter-spacing: 1px;
+        box-shadow: 0 0 30px rgba(255, 77, 109, 0.6);
+        cursor: pointer;
+        transition:
+          opacity 1.5s ease,
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+        opacity: 0;
+        pointer-events: none;
+      }
+      .btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 40px rgba(255, 77, 109, 0.9);
+      }
+
+      /* =========================
+       STEP 1 : INTRO
+    ========================= */
+      #intro {
+        flex-direction: column;
+        opacity: 0;
+        animation: fadeIn 3s forwards;
+      }
+      #greeting {
+        font-size: 20px;
+        opacity: 0.7;
+        margin-bottom: 10px;
+      }
+      #name {
+        font-family: "Playfair Display", serif;
+        font-size: 52px;
+        color: #ff4d6d;
+        min-height: 60px;
+      }
+
+      /* =========================
+       STEP 2 : PROMISE
+    ========================= */
+      #promise {
+        opacity: 0;
+      }
+      #promiseText {
+        font-size: 22px;
+        line-height: 1.8;
+        opacity: 0;
+        transform: translateY(20px);
+        transition:
+          opacity 3s ease,
+          transform 3s ease;
+      }
+
+      /* =========================
+       STEP 3 : GALLERY
+    ========================= */
+      #gallerySection {
+        flex-direction: column;
+        opacity: 0;
+      }
+      #galleryWrapper {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 28px;
+        margin-bottom: 40px;
+      }
+      .memory {
+        width: 180px;
+        height: 260px;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 0 35px rgba(255, 77, 109, 0.6);
+        opacity: 0;
+        transform: translateY(40px);
+        transition:
+          opacity 1.2s ease,
+          transform 1.2s ease;
+        position: relative;
+      }
+      .memory img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.65);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: 0.4s;
+      }
+      .memory:hover .overlay {
+        opacity: 1;
+      }
+
+      /* =========================
+       STEP 4 : CONFESSION
+    ========================= */
+      #confession {
+        opacity: 0;
+      }
+      #confessionBox {
+        max-width: 700px;
+        text-align: left;
+        font-size: 18px;
+        line-height: 1.9;
+      }
+      #cursorBlink {
+        animation: blink 1s infinite;
+      }
+
+      /* =========================
+       STEP 5 : SILENCE
+    ========================= */
+      #silence {
+        opacity: 0;
+        transition: opacity 3s ease;
+      }
+      #truthLine {
+        font-family: "Playfair Display", serif;
+        font-size: 34px;
+        color: #ff4d6d;
+        opacity: 0;
+        transition: opacity 4s ease;
+      }
+
+      /* =========================
+       STEP 6 : ENDING
+    ========================= */
+      #ending {
+        flex-direction: column;
+        opacity: 0;
+        transition: opacity 3s ease;
+      }
+      #heartEmoji {
+        font-size: 64px;
+        margin-bottom: 30px;
+        animation: beat 1.8s infinite;
+      }
+      #finalMessage {
+        font-family: "Playfair Display", serif;
+        font-size: 22px;
+        opacity: 0;
+        transition: opacity 3s ease;
+      }
+
+      /* =========================
+       STEP 7 : GAME
+    ========================= */
+      #promiseGame {
+        flex-direction: column;
+        opacity: 0;
+        transition: opacity 2s ease;
+      }
+      #gameTitle {
+        font-family: "Playfair Display", serif;
+        font-size: 36px;
+        color: #ff4d6d;
+        margin-bottom: 8px;
+      }
+      #gameSub {
+        font-size: 16px;
+        opacity: 0.8;
+        margin-bottom: 25px;
+      }
+      #promiseGrid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        perspective: 1200px;
+      }
+      .gift {
+        width: 170px;
+        height: 170px;
+        transform-style: preserve-3d;
+        transition: transform 0.8s ease;
+        cursor: pointer;
+        position: relative;
+      }
+      .gift.open {
+        transform: rotateY(180deg);
+        pointer-events: none;
+      }
+      .giftFace {
+        position: absolute;
+        inset: 0;
+        border-radius: 20px;
+        backface-visibility: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 15px;
+        font-size: 15px;
+      }
+      .giftFront {
+        background: linear-gradient(145deg, #ff4d6d, #ff85a2);
+        font-size: 48px;
+        color: #000;
+      }
+      .giftBack {
+        background: rgba(255, 77, 109, 0.25);
+        border: 1px solid #ff4d6d;
+        transform: rotateY(180deg);
+      }
+
+      #gameFinalText {
+        margin-top: 35px;
+        font-family: "Playfair Display", serif;
+        font-size: 22px;
+        opacity: 0;
+        transition: opacity 2s ease;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+      @keyframes beat {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.12);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      /* =========================
+   STEP 8 : SECRET LETTER
+========================= */
+      #secretPage {
+        background: linear-gradient(180deg, #ffd6e8, #ffeef5);
+        flex-direction: column;
+        opacity: 0;
+        transition: opacity 2s ease;
+      }
+
+      #envelope {
+        width: 200px;
+        height: 140px;
+        background: #fff;
+        border-radius: 14px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 60px;
+        cursor: pointer;
+        box-shadow: 0 0 40px rgba(255, 77, 109, 0.4);
+        animation: floatEnvelope 3s ease-in-out infinite;
+      }
+
+      @keyframes floatEnvelope {
+        0% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-12px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+
+      #passwordBox {
+        display: none;
+        background: #fff;
+        padding: 30px;
+        border-radius: 20px;
+        margin-top: 30px;
+        width: 320px;
+        box-shadow: 0 0 40px rgba(255, 77, 109, 0.3);
+      }
+
+      #passwordBox input {
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid #ff85a2;
+        outline: none;
+        margin-top: 15px;
+      }
+
+      #passwordHint {
+        margin-top: 10px;
+        color: #b03060;
+        font-size: 14px;
+        opacity: 0;
+      }
+
+      #openLetterBtn {
+        margin-top: 20px;
+        padding: 10px 25px;
+        border-radius: 20px;
+        border: none;
+        background: #ff85a2;
+        color: white;
+        cursor: pointer;
+      }
+
+      #finalLetter {
+        display: none;
+        margin-top: 40px;
+        background: white;
+        padding: 35px;
+        border-radius: 25px;
+        max-width: 500px;
+        font-size: 17px;
+        line-height: 1.9;
+        color: #5a1a2e;
+        box-shadow: 0 0 50px rgba(255, 77, 109, 0.4);
+      }
+      /* =========================
+ MAGIC REVEAL EFFECTS
+========================= */
+
+      @keyframes magicReveal {
+        0% {
+          transform: scale(0.6);
+          opacity: 0;
+          filter: blur(10px);
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+          filter: blur(0);
+        }
+      }
+
+      @keyframes glowPulse {
+        0% {
+          box-shadow: 0 0 10px rgba(255, 77, 109, 0.4);
+        }
+        50% {
+          box-shadow: 0 0 40px rgba(255, 77, 109, 0.9);
+        }
+        100% {
+          box-shadow: 0 0 10px rgba(255, 77, 109, 0.4);
+        }
+      }
+
+      @keyframes bubbleFloat {
+        0% {
+          transform: translateY(0);
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 0.6;
+        }
+        100% {
+          transform: translateY(-60px);
+          opacity: 0;
+        }
+      }
+
+      .magicShow {
+        animation:
+          magicReveal 2.5s ease forwards,
+          glowPulse 3s infinite;
+      }
+
+      .bubble {
+        position: absolute;
+        bottom: -20px;
+        width: 12px;
+        height: 12px;
+        background: rgba(255, 182, 193, 0.6);
+        border-radius: 50%;
+        animation: bubbleFloat 6s linear infinite;
+      }
+      /* =========================
+STEP 9 : HOLD HEART PAGE
+========================= */
+
+      #holdHeartPage {
+        background: #ffd6e5;
+        flex-direction: column;
+        opacity: 0;
+        transition: opacity 2s ease;
+      }
+
+      #holdText {
+        font-size: 22px;
+        margin-bottom: 40px;
+        color: #b03060;
+      }
+
+      #holdWrapper {
+        width: 220px;
+        height: 220px;
+        position: relative;
+      }
+
+      #holdHeart {
+        font-size: 90px;
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        animation: pulse 1.5s infinite;
+      }
+
+      #holdRing {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: 6px solid #ff4d6d;
+        transform: scale(0);
+      }
+
+      /* =========================
+STEP 10 : VALENTINE PAGE
+========================= */
+
+      #valentinePage {
+        background: #ffd1dc;
+        background-image: radial-gradient(#ff4d6d33 2px, transparent 2px);
+        background-size: 40px 40px;
+        flex-direction: column;
+        opacity: 0;
+        transition: opacity 2s ease;
+      }
+
+      #valentineTitle {
+        font-size: 42px;
+        color: #ff4d6d;
+        margin-bottom: 40px;
+      }
+
+      #valentineButtons button {
+        padding: 15px 30px;
+        border-radius: 30px;
+        border: none;
+        font-size: 18px;
+        cursor: pointer;
+        margin: 10px;
+      }
+
+      #yesBtn {
+        background: #ff4d6d;
+        color: white;
+        transition: transform 0.3s;
+      }
+
+      #noBtn {
+        background: #444;
+        color: white;
+      }
+
+      #begText {
+        margin-top: 25px;
+        font-size: 18px;
+        color: #b03060;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.15);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      /* =========================
+STEP 11 : CELEBRATION PAGE
+========================= */
+
+      #celebratePage {
+        background: radial-gradient(circle, #ffb6c1, #ff4d6d);
+        flex-direction: column;
+        opacity: 0;
+        transition: opacity 2s ease;
+      }
+
+      #celebrateConfetti {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+      }
+
+      #celebrateText {
+        font-size: 60px;
+        color: white;
+        font-family: "Playfair Display", serif;
+        text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+        z-index: 2;
+        animation: pop 1.2s ease;
+      }
+
+      @keyframes pop {
+        0% {
+          transform: scale(0);
+        }
+        80% {
+          transform: scale(1.2);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      /* ================================
+   CINEMATIC SECRET LETTER PAGE
+================================ */
+
+      #secretPage {
+        min-height: 100vh;
+        background: radial-gradient(circle, #ffd6e5, #ffb6d5);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 2s ease;
+      }
+
+      #magicEnvelope {
+        font-size: 90px;
+        cursor: pointer;
+        animation: floatEnvelope 3s ease-in-out infinite;
+      }
+
+      @keyframes floatEnvelope {
+        0% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-18px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+
+      #passwordBox {
+        display: none;
+        background: #fff;
+        padding: 30px;
+        border-radius: 20px;
+        margin-top: 25px;
+        width: 320px;
+        box-shadow: 0 0 40px rgba(255, 77, 109, 0.5);
+      }
+
+      #passwordBox input {
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid pink;
+        margin-top: 15px;
+        font-size: 16px;
+      }
+
+      #passwordBox button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 20px;
+        background: #ff4d6d;
+        color: white;
+        cursor: pointer;
+      }
+
+      #hintText {
+        margin-top: 10px;
+        color: #c43a5f;
+      }
+
+      #loveLetter {
+        display: none;
+        background: white;
+        padding: 35px;
+        border-radius: 25px;
+        max-width: 520px;
+        line-height: 1.9;
+        animation: letterOpen 2s ease;
+      }
+
+      @keyframes letterOpen {
+        from {
+          transform: scale(0.6);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      /* =====================================
+   RESPONSIVE DESIGN (MOBILE + TABLET + LAPTOP)
+===================================== */
+
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      section {
+        padding: 16px;
+      }
+
+      /* LAPTOP */
+      @media (min-width: 1024px) {
+        #name {
+          font-size: 60px;
+        }
+        #promiseText {
+          font-size: 24px;
+        }
+        #galleryWrapper {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .memory {
+          width: 200px;
+          height: 280px;
+        }
+        #confessionBox {
+          font-size: 20px;
+        }
+      }
+
+      /* TABLET */
+      @media (max-width: 1023px) {
+        #galleryWrapper {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        #promiseGrid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      /* MOBILE */
+      @media (max-width: 600px) {
+        #name {
+          font-size: 38px;
+        }
+        .btn {
+          padding: 12px 26px;
+          font-size: 14px;
+        }
+
+        #galleryWrapper {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .memory {
+          width: 150px;
+          height: 220px;
+        }
+
+        #confessionBox {
+          font-size: 16px;
+        }
+
+        .gift {
+          width: 140px;
+          height: 140px;
+        }
+
+        #finalLetter {
+          width: 90%;
+        }
+
+        #valentineTitle {
+          font-size: 30px;
+        }
+
+        #celebrateText {
+          font-size: 36px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <canvas id="hearts"></canvas>
+    <canvas id="confetti"></canvas>
+
+    <!-- STEP 1 -->
+    <section id="intro">
+      <div id="greeting"></div>
+      <div id="name"></div>
+      <button id="continueBtn" class="btn">Continue with love ❤️</button>
+    </section>
+
+    <!-- STEP 2 -->
+    <section id="promise">
+      <div id="promiseText">
+        I made this slowly…<br />thinking of you my love 💕.
+      </div>
+    </section>
+
+    <audio id="bgMusic" src="music.mp3"></audio>
+
+    <!-- STEP 3 -->
+    <section id="gallerySection">
+      <div id="galleryWrapper">
+        <div class="memory">
+          <img src="img1.jpg" />
+          <div class="overlay">My favorite smile ✨</div>
+        </div>
+        <div class="memory">
+          <img src="img2.jpg" />
+          <div class="overlay">That random day ☀️</div>
+        </div>
+        <div class="memory">
+          <img src="img3.jpg" />
+          <div class="overlay">You feel like home 🏡</div>
+        </div>
+        <div class="memory">
+          <img src="img4.jpg" />
+          <div class="overlay">My safe place 🌤️</div>
+        </div>
+        <div class="memory">
+          <img src="img5.jpg" />
+          <div class="overlay">Always you 🌙</div>
+        </div>
+        <div class="memory">
+          <img src="img6.jpg" />
+          <div class="overlay">Forever us♾️</div>
+        </div>
+      </div>
+      <button id="galleryBtn" class="btn">There’s something more ❤️</button>
+    </section>
+
+    <!-- STEP 4 -->
+    <section id="confession">
+      <div id="confessionBox">
+        <div id="typingArea"></div>
+        <span id="cursorBlink">|</span>
+      </div>
+    </section>
+
+    <!-- STEP 5 -->
+    <section id="silence">
+      <div id="truthLine">I will always choose you.</div>
+    </section>
+
+    <!-- STEP 6 -->
+    <section id="ending">
+      <div id="heartEmoji">💞</div>
+      <div id="finalMessage">As long as this heart beats…<br />I’m here.</div>
+      <button id="funBtn" class="btn">LETS HAVE SOME FUN LOVE!💗</button>
+    </section>
+
+    <!-- STEP 7 -->
+    <section id="promiseGame">
+      <div id="gameTitle">Promise Keeper 💖</div>
+      <div id="gameSub">Tap on the gift card one by one slowly cutiieee</div>
+
+      <div id="promiseGrid">
+        <div class="gift">
+          <div class="giftFace giftFront">🎁</div>
+          <div class="giftFace giftBack">I’ll choose you every day</div>
+        </div>
+        <div class="gift">
+          <div class="giftFace giftFront">🎁</div>
+          <div class="giftFace giftBack">I’ll annoy you forever</div>
+        </div>
+        <div class="gift">
+          <div class="giftFace giftFront">🎁</div>
+          <div class="giftFace giftBack">I’ll protect your heart</div>
+        </div>
+        <div class="gift">
+          <div class="giftFace giftFront">🎁</div>
+          <div class="giftFace giftBack">I’ll love you on hard days</div>
+        </div>
+        <div class="gift">
+          <div class="giftFace giftFront">🎁</div>
+          <div class="giftFace giftBack">I’ll always stand with you</div>
+        </div>
+        <div class="gift">
+          <div class="giftFace giftFront">🎁</div>
+          <div class="giftFace giftBack">I’ll never stop choosing us</div>
+        </div>
+      </div>
+
+      <div id="gameFinalText">
+        These aren’t promises…<br />they’re my future with you ❤️
+      </div>
+    </section>
+    <!-- STEP 8 : SECRET LETTER PAGE -->
+    <section id="secretPage">
+      <div id="envelope">💌</div>
+
+      <div id="passwordBox">
+        <div>What i call you the most? 💗</div>
+        <input id="passwordInput" placeholder="Type the secret here..." />
+        <button id="openLetterBtn">Open my heart 💞</button>
+        <div id="passwordHint"></div>
+      </div>
+
+      <div id="finalLetter" style="position: relative; overflow: hidden">
+        My love… ❤️<br /><br />
+        If the world ever feels heavy,<br />
+        remember this one thing —<br /><br />
+        I’m here. Always.<br /><br />
+        I choose you today,<br />
+        tomorrow,<br />
+        and in every lifetime. 💖
+        <br /><br />
+        <button
+          id="letterNextBtn"
+          class="btn"
+          style="opacity: 1; pointer-events: auto"
+        >
+          HERE DARLING! 💗
+        </button>
+      </div>
+    </section>
+
+    <!-- =========================
+STEP 9 : HOLD HEART PAGE
+========================= -->
+    <section id="holdHeartPage">
+      <div id="holdText">Hold my heart for a moment…</div>
+
+      <div id="holdWrapper">
+        <div id="holdRing"></div>
+        <div id="holdHeart">💗</div>
+      </div>
+    </section>
+
+    <!-- =========================
+STEP 10 : VALENTINE PAGE
+========================= -->
+    <section id="valentinePage">
+      <div class="floating-hearts"></div>
+
+      <h1 id="valentineTitle">Will you be my Valentine? 💝</h1>
+
+      <div id="valentineButtons">
+        <button id="yesBtn">YES I WILL 💖</button>
+        <button id="noBtn">NO I'M NOT 😤</button>
+      </div>
+
+      <div id="begText"></div>
+    </section>
+    <!-- =========================
+STEP 11 : CELEBRATION PAGE
+========================= -->
+    <section id="celebratePage">
+      <canvas id="celebrateConfetti"></canvas>
+
+      <div id="celebrateText">YAYYY I LOVE YOUU AYSKUTTY 💞</div>
+    </section>
+
+    <audio id="burstSound" src="burst.mp3"></audio>
+
+    <!-- SOUNDS -->
+    <audio id="heartbeatSound" src="heartbeat.mp3" loop></audio>
+    <audio id="sparkleSound" src="sparkle.mp3"></audio>
+    <audio id="yesSound" src="yes.mp3"></audio>
+
+    <script>
+      const secretPage = document.getElementById("secretPage");
+      const envelope = document.getElementById("envelope");
+      const passwordBox = document.getElementById("passwordBox");
+      const passwordInput = document.getElementById("passwordInput");
+      const openLetterBtn = document.getElementById("openLetterBtn");
+      const passwordHint = document.getElementById("passwordHint");
+      const finalLetter = document.getElementById("finalLetter");
+      const letterNextBtn = document.getElementById("letterNextBtn");
+
+      const holdHeartPage = document.getElementById("holdHeartPage");
+      const valentinePage = document.getElementById("valentinePage");
+      const celebratePage = document.getElementById("celebratePage");
+      const gameFinalText = document.getElementById("gameFinalText");
+
+      /* ELEMENT REFERENCES (REQUIRED FIX) */
+      const greeting = document.getElementById("greeting");
+      const name = document.getElementById("name");
+      const continueBtn = document.getElementById("continueBtn");
+
+      /* GREETING + NAME (AYS KUTTY PRESENT & WORKING) */
+      const hour = new Date().getHours();
+      greeting.innerText =
+        hour < 12
+          ? "Good Morning Sweet heart ☀️"
+          : hour < 18
+            ? "Good Evening Chelloww 🌤️"
+            : "Iravu Vanakam alagiiii 🌙";
+
+      const herName = " Ayskutty";
+      let n = 0;
+      function typeName() {
+        if (n < herName.length) {
+          name.innerHTML += herName[n++];
+          setTimeout(typeName, 180);
+        } else {
+          continueBtn.style.opacity = 1;
+          continueBtn.style.pointerEvents = "auto";
+        }
+      }
+      setTimeout(typeName, 2000);
+
+      /* STORY FLOW */
+      continueBtn.onclick = () => {
+        bgMusic.volume = 0.6;
+        bgMusic.play();
+        promise.style.opacity = 1;
+        promiseText.style.opacity = 1;
+        promiseText.style.transform = "translateY(0)";
+        promise.scrollIntoView({ behavior: "smooth" });
+        setTimeout(showGallery, 4000);
+      };
+
+      function showGallery() {
+        gallerySection.style.opacity = 1;
+        gallerySection.scrollIntoView({ behavior: "smooth" });
+        document.querySelectorAll(".memory").forEach((m, i) => {
+          setTimeout(() => {
+            m.style.opacity = 1;
+            m.style.transform = "translateY(0)";
+          }, i * 400);
+        });
+        setTimeout(() => {
+          galleryBtn.style.opacity = 1;
+          galleryBtn.style.pointerEvents = "auto";
+        }, 3000);
+      }
+
+      const lines = [
+        "I’ve never been good at explaining my feelings.",
+        "But when it comes to you…",
+        "my heart finds the words.",
+        "",
+        "You came into my life like a dream.",
+        "And became my everyday thought.",
+        "You risk your life for me and stayed for me.",
+        "And that means everything to me.",
+        "WHATEVER HAPPENS...",
+      ];
+      let li = 0;
+
+      galleryBtn.onclick = () => {
+        confession.style.opacity = 1;
+        confession.scrollIntoView({ behavior: "smooth" });
+        setTimeout(typeLine, 1000);
+      };
+
+      function typeLine() {
+        if (li < lines.length) {
+          const d = document.createElement("div");
+          typingArea.appendChild(d);
+          let c = 0,
+            txt = lines[li++];
+          const int = setInterval(() => {
+            if (c < txt.length) {
+              d.textContent += txt[c++];
+            } else {
+              clearInterval(int);
+              setTimeout(typeLine, 800);
+            }
+          }, 45);
+        } else {
+          setTimeout(showSilence, 2500);
+        }
+      }
+
+      function showSilence() {
+        silence.style.opacity = 1;
+        silence.scrollIntoView({ behavior: "smooth" });
+        setTimeout(() => (truthLine.style.opacity = 1), 2000);
+        setTimeout(showEnding, 6000);
+      }
+
+      function showEnding() {
+        ending.style.opacity = 1;
+        ending.scrollIntoView({ behavior: "smooth" });
+        setTimeout(() => {
+          finalMessage.style.opacity = 1;
+          setTimeout(() => {
+            funBtn.style.opacity = 1;
+            funBtn.style.pointerEvents = "auto";
+          }, 2500);
+        }, 3000);
+      }
+
+      funBtn.onclick = () => {
+        promiseGame.style.opacity = 1;
+        promiseGame.scrollIntoView({ behavior: "smooth" });
+      };
+
+      /* CONFETTI BURST ON GIFT OPEN */
+      const confetti = document.getElementById("confetti");
+      const cctx = confetti.getContext("2d");
+      confetti.width = innerWidth;
+      confetti.height = innerHeight;
+
+      let particles = [];
+      function burst(x, y) {
+        for (let i = 0; i < 30; i++) {
+          particles.push({
+            x,
+            y,
+            vx: (Math.random() - 0.5) * 6,
+            vy: (Math.random() - 0.7) * 6,
+            r: Math.random() * 4 + 2,
+            a: 1,
+          });
+        }
+      }
+
+      function animateConfetti() {
+        cctx.clearRect(0, 0, confetti.width, confetti.height);
+        particles.forEach((p) => {
+          cctx.fillStyle = `rgba(255,77,109,${p.a})`;
+          cctx.beginPath();
+          cctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          cctx.fill();
+          p.x += p.vx;
+          p.y += p.vy;
+          p.a -= 0.02;
+        });
+        particles = particles.filter((p) => p.a > 0);
+        requestAnimationFrame(animateConfetti);
+      }
+      animateConfetti();
+
+      /* GAME LOGIC */
+      let opened = 0;
+
+      document.querySelectorAll(".gift").forEach((gift) => {
+        gift.onclick = (e) => {
+          if (!gift.classList.contains("open")) {
+            gift.classList.add("open");
+            opened++;
+            burst(e.clientX, e.clientY);
+
+            if (opened === 6) {
+              gameFinalText.style.opacity = 1;
+
+              setTimeout(() => {
+                secretPage.style.opacity = 1;
+                secretPage.scrollIntoView({ behavior: "smooth" });
+              }, 2500);
+            }
+          }
+        };
+      });
+
+      /* FLOATING HEARTS */
+      const ctx = hearts.getContext("2d");
+      hearts.width = innerWidth;
+      hearts.height = innerHeight;
+      let h = Array.from({ length: 60 }, () => ({
+        x: Math.random() * hearts.width,
+        y: Math.random() * hearts.height,
+        r: Math.random() * 2 + 1,
+        s: Math.random() * 0.4 + 0.1,
+      }));
+      (function anim() {
+        ctx.clearRect(0, 0, hearts.width, hearts.height);
+        h.forEach((o) => {
+          ctx.fillStyle = "rgba(255,77,109,.4)";
+          ctx.beginPath();
+          ctx.arc(o.x, o.y, o.r, 0, Math.PI * 2);
+          ctx.fill();
+          o.y -= o.s;
+          if (o.y < 0) o.y = hearts.height;
+        });
+        requestAnimationFrame(anim);
+      })();
+      /* =========================
+               SECRET LETTER LOGIC
+            ========================= */
+
+      envelope.onclick = () => {
+        envelope.style.display = "none";
+        passwordBox.style.display = "block";
+      };
+
+      const correctPassword = "ayskutty";
+
+      openLetterBtn.onclick = () => {
+        if (passwordInput.value.toLowerCase() === correctPassword) {
+          passwordBox.style.display = "none";
+          finalLetter.style.display = "block";
+          letterNextBtn.style.display = "inline-block";
+        } else {
+          passwordHint.innerText = "It’s what I always call you 😌";
+          passwordHint.style.opacity = 1;
+        }
+      };
+      letterNextBtn.onclick = () => {
+        holdHeartPage.style.opacity = 1;
+        holdHeartPage.scrollIntoView({ behavior: "smooth" });
+      };
+
+      /* =========================
+            SHOW HOLD HEART AFTER GAME
+            ========================= */
+
+      /* =========================
+            HOLD HEART LOGIC
+            ========================= */
+
+      const holdHeart = document.getElementById("holdHeart");
+      const holdRing = document.getElementById("holdRing");
+      const heartbeat = document.getElementById("heartbeatSound");
+      const sparkle = document.getElementById("sparkleSound");
+      const yesSound = document.getElementById("yesSound");
+
+      let holding = false;
+      let progress = 0;
+
+      holdHeart.onmousedown = () => {
+        holding = true;
+        heartbeat.play();
+      };
+
+      document.onmouseup = () => {
+        holding = false;
+        heartbeat.pause();
+        heartbeat.currentTime = 0;
+      };
+
+      function holdLoop() {
+        if (holding) {
+          progress += 1;
+          holdRing.style.transform = `scale(${progress / 150})`;
+
+          if (progress >= 150) {
+            sparkle.play();
+            valentinePage.style.opacity = 1;
+            valentinePage.scrollIntoView({ behavior: "smooth" });
+          }
+        }
+        requestAnimationFrame(holdLoop);
+      }
+      holdLoop();
+
+      /* =========================
+            VALENTINE BUTTON LOGIC
+            ========================= */
+
+      let size = 1;
+
+      noBtn.onclick = () => {
+        size += 0.1;
+        yesBtn.style.transform = `scale(${size})`;
+
+        const lines = [
+          "pls consider me love 🥺",
+          "im a good boy 😭",
+          "i will treat you like queen 👑",
+          "dont break my heart 💔",
+          "say yes pleaseeee 😭💖",
+        ];
+
+        begText.innerText = lines[Math.floor(Math.random() * lines.length)];
+      };
+
+      yesBtn.onclick = () => {
+        yesSound.play();
+        burstSound.play();
+
+        celebratePage.style.opacity = 1;
+        celebratePage.scrollIntoView({ behavior: "smooth" });
+
+        startCelebrateConfetti();
+      };
+      /* =========================
+      CELEBRATION CONFETTI
+      ========================= */
+
+      const cCanvas = document.getElementById("celebrateConfetti");
+      const cCtx = cCanvas.getContext("2d");
+
+      cCanvas.width = innerWidth;
+      cCanvas.height = innerHeight;
+
+      let confs = [];
+
+      function startCelebrateConfetti() {
+        for (let i = 0; i < 250; i++) {
+          confs.push({
+            x: Math.random() * cCanvas.width,
+            y: Math.random() * cCanvas.height,
+            vx: (Math.random() - 0.5) * 8,
+            vy: Math.random() * -6 - 2,
+            r: Math.random() * 6 + 2,
+            heart: Math.random() > 0.7,
+          });
+        }
+      }
+
+      function animateCelebrate() {
+        cCtx.clearRect(0, 0, cCanvas.width, cCanvas.height);
+
+        confs.forEach((p) => {
+          cCtx.fillStyle = p.heart ? "#ff4d6d" : "#ffd1dc";
+          cCtx.beginPath();
+          cCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          cCtx.fill();
+
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.15;
+        });
+
+        requestAnimationFrame(animateCelebrate);
+      }
+
+      animateCelebrate();
+    </script>
+  </body>
+</html>
