@@ -69,6 +69,12 @@
         opacity: 0;
         pointer-events: none;
       }
+      #goHeartBtn {
+        opacity: 0;
+        pointer-events: none;
+        margin-top: 30px;
+      }
+
       .btn:hover {
         transform: scale(1.05);
         box-shadow: 0 0 40px rgba(255, 77, 109, 0.9);
@@ -740,6 +746,86 @@ STEP 11 : CELEBRATION PAGE
           font-size: 36px;
         }
       }
+      /* MOBILE TOUCH FIX */
+      #holdHeart {
+        touch-action: none;
+      }
+      /* SECRET LETTER CINEMATIC REVEAL */
+      #finalLetter {
+        display: none;
+        transform: scale(0.85);
+        opacity: 0;
+        animation: letterReveal 2.2s ease forwards;
+      }
+
+      @keyframes letterReveal {
+        0% {
+          opacity: 0;
+          transform: scale(0.8);
+          filter: blur(8px);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+          filter: blur(0);
+        }
+      }
+
+      /* Mobile friendly text */
+      #finalLetter p {
+        margin-bottom: 14px;
+        line-height: 1.9;
+        font-size: 16px;
+      }
+      /* ===============================
+SECRET LETTER CINEMATIC FADE
+================================ */
+
+      #finalLetter {
+        display: none;
+        background: white;
+        padding: 35px;
+        border-radius: 25px;
+        max-width: 520px;
+        box-shadow: 0 0 40px rgba(255, 77, 109, 0.4);
+      }
+
+      /* Each line */
+      .letter-line {
+        opacity: 0;
+        margin-bottom: 14px;
+        line-height: 1.9;
+        font-size: 16px;
+        animation: fadeLine 2s ease forwards;
+      }
+
+      /* Fade animation */
+      @keyframes fadeLine {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* HERE DARLING BUTTON */
+      #nextFromSecret {
+        display: none;
+        margin-top: 25px;
+        padding: 14px 28px;
+        border-radius: 25px;
+        border: none;
+        background: #ff4d6d;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        box-shadow: 0 0 25px rgba(255, 77, 109, 0.6);
+        opacity: 0;
+        transition: opacity 2s ease;
+      }
     </style>
   </head>
 
@@ -861,23 +947,8 @@ STEP 11 : CELEBRATION PAGE
         <div id="passwordHint"></div>
       </div>
 
-      <div id="finalLetter" style="position: relative; overflow: hidden">
-        My love… ❤️<br /><br />
-        If the world ever feels heavy,<br />
-        remember this one thing —<br /><br />
-        I’m here. Always.<br /><br />
-        I choose you today,<br />
-        tomorrow,<br />
-        and in every lifetime. 💖
-        <br /><br />
-        <button
-          id="letterNextBtn"
-          class="btn"
-          style="opacity: 1; pointer-events: auto"
-        >
-          HERE DARLING! 💗
-        </button>
-      </div>
+      <div id="finalLetter"></div>
+      <button id="goHeartBtn" class="btn">HERE DARLING ❤️</button>
     </section>
 
     <!-- =========================
@@ -930,13 +1001,15 @@ STEP 11 : CELEBRATION PAGE
       const passwordInput = document.getElementById("passwordInput");
       const openLetterBtn = document.getElementById("openLetterBtn");
       const passwordHint = document.getElementById("passwordHint");
-      const finalLetter = document.getElementById("finalLetter");
+
       const letterNextBtn = document.getElementById("letterNextBtn");
 
       const holdHeartPage = document.getElementById("holdHeartPage");
       const valentinePage = document.getElementById("valentinePage");
       const celebratePage = document.getElementById("celebratePage");
       const gameFinalText = document.getElementById("gameFinalText");
+      const goHeartBtn = document.getElementById("goHeartBtn");
+      const finalLetter = document.getElementById("finalLetter");
 
       /* ELEMENT REFERENCES (REQUIRED FIX) */
       const greeting = document.getElementById("greeting");
@@ -1105,7 +1178,7 @@ STEP 11 : CELEBRATION PAGE
               setTimeout(() => {
                 secretPage.style.opacity = 1;
                 secretPage.scrollIntoView({ behavior: "smooth" });
-              }, 2500);
+              }, 4500);
             }
           }
         };
@@ -1143,20 +1216,50 @@ STEP 11 : CELEBRATION PAGE
       };
 
       const correctPassword = "ayskutty";
+      const letterLines = [
+        "My love… ❤️",
+        "",
+        "If the world ever feels heavy,",
+        "remember this one thing —",
+        "",
+        "I’m here. Always.",
+        "",
+        "I choose you today,",
+        "tomorrow,",
+        "and in every lifetime. 💖",
+      ];
+
+      let letterIndex = 0;
+
+      function typeSecretLetter() {
+        if (letterIndex < letterLines.length) {
+          const p = document.createElement("div");
+          p.className = "letter-line";
+          p.innerText = letterLines[letterIndex];
+          finalLetter.appendChild(p);
+          letterIndex++;
+
+          setTimeout(typeSecretLetter, 1200); // slow fade
+        } else {
+          // SHOW BUTTON AFTER LAST LINE
+          setTimeout(() => {
+            goHeartBtn.style.opacity = 1;
+            goHeartBtn.style.pointerEvents = "auto";
+          }, 1500);
+        }
+      }
 
       openLetterBtn.onclick = () => {
         if (passwordInput.value.toLowerCase() === correctPassword) {
           passwordBox.style.display = "none";
+          finalLetter.innerHTML = "";
           finalLetter.style.display = "block";
-          letterNextBtn.style.display = "inline-block";
+          letterIndex = 0;
+          typeSecretLetter();
         } else {
           passwordHint.innerText = "It’s what I always call you 😌";
           passwordHint.style.opacity = 1;
         }
-      };
-      letterNextBtn.onclick = () => {
-        holdHeartPage.style.opacity = 1;
-        holdHeartPage.scrollIntoView({ behavior: "smooth" });
       };
 
       /* =========================
@@ -1176,16 +1279,31 @@ STEP 11 : CELEBRATION PAGE
       let holding = false;
       let progress = 0;
 
-      holdHeart.onmousedown = () => {
+      // START HOLD (MOUSE + TOUCH)
+      function startHold() {
         holding = true;
         heartbeat.play();
-      };
+      }
 
-      document.onmouseup = () => {
+      // STOP HOLD (MOUSE + TOUCH)
+      function stopHold() {
         holding = false;
         heartbeat.pause();
         heartbeat.currentTime = 0;
-      };
+      }
+
+      // Desktop
+      holdHeart.addEventListener("mousedown", startHold);
+      document.addEventListener("mouseup", stopHold);
+
+      // Mobile
+      holdHeart.addEventListener("touchstart", (e) => {
+        e.preventDefault(); // stops emoji select
+        startHold();
+      });
+
+      document.addEventListener("touchend", stopHold);
+      document.addEventListener("touchcancel", stopHold);
 
       function holdLoop() {
         if (holding) {
@@ -1275,6 +1393,12 @@ STEP 11 : CELEBRATION PAGE
       }
 
       animateCelebrate();
+
+      goHeartBtn.addEventListener("click", () => {
+        // Go to hold heart page
+        holdHeartPage.style.opacity = 1;
+        holdHeartPage.scrollIntoView({ behavior: "smooth" });
+      });
     </script>
   </body>
 </html>
